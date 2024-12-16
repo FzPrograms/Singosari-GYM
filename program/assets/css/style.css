@@ -1075,16 +1075,18 @@ button:hover{
   color: var(--rich-black-fogra-29-2); }
 
 .class-card {
-  background-color: var(--white);
-  border-radius: var(--radius-10);
-  height: 100%;
-  overflow: hidden;
-}
+  display: block;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 15px;
+  background-color: #fff;
+  transition: all 0.3s ease;}
 
 .class-card .card-banner img { transition: var(--transition-2); }
 
 .class-card:is(:hover, :focus-within) .card-banner img {
-  transform: scale(1.1);
+  transform: translateY(-4px);
 }
 
 .class-card .card-content { 
@@ -1126,6 +1128,7 @@ button:hover{
   font-size: var(--fs-6);
   font-weight: var(--fw-800);
   margin-block-end: 8px;
+  transform: translateY(-4px);
 }
 
 .class-card .progress-bg {
@@ -1138,56 +1141,118 @@ button:hover{
   height: 10px;
   border-radius: inherit;
 }
-
+input[type="radio"]:checked + .class-card {
+  border: 3px solid #ff4500; /* Border berwarna orange */
+  background-color: #fff7f3; /* Warna background saat dipilih */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Efek shadow */
+  transition: all 0.3s ease; /* Animasi transisi */
+  transform: translateY(-4px);
+}
 
 
 
 /* PROGRAM LANGGANAN */
 
 .langganan {
-  
   text-align: center;
   background-color: #fefefe;
   font-weight: var(--fw-800);
-  }
-  .title {
+}
+
+.title {
   font-size: 24px;
   font-weight: bold;
   color: #ff5733;
   margin-bottom: 20px;
-  }
-  .isi {
-    justify-content: center;
-    font-size: 24px;
-    display: flex;
-    gap: 25px;
-    overflow-x: auto;
-    padding-block-end: 30px;
-    scroll-snap-type: inline mandatory;
-  }
-  .box {
-    background-color: #fdece8;
-    padding: 25px;
-    border-radius: 10px;
-    width: 344px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-inline: 8px;
-  }
-  .box h3 {
+}
+
+.isi {
+  justify-content: center;
+  font-size: 24px;
+  display: flex;
+  gap: 25px;
+  overflow-x: auto;
+  padding-block-end: 30px;
+  scroll-snap-type: inline mandatory;
+}
+
+.box {
+  cursor: pointer; /* Membuat kursor berbentuk pointer */
+  display: block;
+  background-color: #fdece8;
+  padding: 12px;
+  border-radius: 10px;
+  width: 344px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-inline: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, padding 0.3s ease, border-color 0.3s ease;
+}
+
+.box:hover {
+  transform: translateY(-5px); /* Efek saat hover */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Efek shadow saat hover */
+}
+
+.box h3 {
   background-color: black;
   color: white;
   padding: 10px;
   border-radius: 5px;
   margin: 0 0 10px;
-  }
-  .price {
+}
+
+.price {
   color: #ff5733;
   font-weight: bold;
-  }
-  .special {
+}
+
+input[type="radio"] {
+  display: none; /* Menyembunyikan radio button */
+}
+
+input[type="radio"]:checked + label .box {
+  border: 3px solid #ff5733; /* Border menjadi oranye saat dipilih */
+  background-color: #ffecd9; /* Ubah background menjadi warna lebih terang saat dipilih */
+  padding: 14px; /* Sesuaikan padding saat dipilih */
+}
+
+input[type="radio"]:checked + label {
+  background-color: #ff5733; /* Background label menjadi oranye */
+  color: white; /* Teks label menjadi putih */
+}
+
+label {
+  display: block;
+  cursor: pointer; /* Mengubah kursor menjadi pointer */
+}
+
+label .choose-btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+label .choose-btn:hover {
+  background-color: #0056b3; /* Efek hover pada tombol pilih */
+}
+
+input[type="radio"]:checked + label .choose-btn {
+  background-color: #28a745;
+}
+
+.special {
   color: #ff5733;
   font-weight: bold;
-  }
+}
+
+
+
 
   .content-container {
     background-color: white;
@@ -1291,20 +1356,36 @@ button:hover{
     padding: 3px 53px;
 }
 
-.pay-button {
-    width: 100%;
-    padding: 10px;
-    background-color: #f15a24;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    font-weight: bold;
-    text-transform: uppercase;
-    text-align: center;
+/* Styling Button Konfirmasi Pembayaran */
+.confirm-button {
+  display: inline-block;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #ff4500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-transform: uppercase;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
 }
 
-.pay-button:hover {
-    background-color: #d94a1f;
+.confirm-button:hover {
+  background-color: #e03e00;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+.confirm-button:active {
+  background-color: #cc3600;
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Wrapper styling untuk centering */
+.confirm-container {
+  text-align: center;
+  margin-top: 20px;
 }

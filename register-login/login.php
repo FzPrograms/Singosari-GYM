@@ -1,30 +1,44 @@
 <?php
-    session_start(); // Start session to read error messages
-    $error = isset($_SESSION['error']) ? $_SESSION['error'] : ''; // Get error message
-    unset($_SESSION['error']); // Clear error after displaying
-    
-    include "../service/database.php";
+session_start(); // Mulai sesi untuk membaca pesan kesalahan
+$error = isset($_SESSION['error']) ? $_SESSION['error'] : ''; 
+unset($_SESSION['error']);
 
-    $login_message = "";
+include "../service/database.php";
 
-    if(isset($_POST["register"])){
-        $nama = $_POST["nama"];
-        $email = $_POST["email"];
+$login_message = ""; // Variabel untuk menyimpan pesan error
 
+// Cek apakah form login dikirim
+if (isset($_POST["login"])) { 
+    $nama = $_POST["nama"];
+    $email = $_POST["email"];
+
+    // Validasi input
+    if (empty($nama) || empty($email)) {
+        $login_message = "Nama dan Email tidak boleh kosong!";
+    } else {
+        // Query untuk mencari data pengguna di database
         $sql = "SELECT * FROM pelanggan WHERE Nama = '$nama' AND Email = '$email'";
+        $result = mysqli_query($db, $sql);
 
-        $result = $db->query($sql);
+        if (mysqli_num_rows($result) > 0) {
+            // Ambil data pengguna dari database
+            $data = mysqli_fetch_assoc($result);
 
-        if($result->num_rows>0){
-            $data = $result->fetch_assoc();
+            // Simpan data ke session
+            $_SESSION['session_nama'] = $data['Nama'];
+            $_SESSION['session_email'] = $data['Email'];
 
-            header("location: ../program/langganan.php");
-        }else{
-            $login_message = "Nama/Email Anda belum terdaftar/salah!";
+            // Redirect ke halaman profil
+            header("Location: ../profil/profil.php");
+            exit();
+        } else {
+            // Jika data tidak ditemukan
+            $login_message = "Nama/Email Anda belum terdaftar atau salah!";
         }
     }
-
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -86,7 +100,7 @@
             <?php if ($login_message): ?>
                 <p style="color: red;"><?= $login_message ?></p>
             <?php endif; ?>
-            <input type="submit" class="btn" value="Login" name="register">
+            <input type="submit" class="btn" value="Login" name="login">
         </form>
         <p class="or">
             ----------or--------
@@ -96,8 +110,10 @@
             <i class="fab fa-facebook"></i>
         </div>
         <div class="links">
-            <p> Don't have an account yet?</p>
-            <button id="signUpButton">Sign Up</button>
+            <p> Belum Mendaftar Akun?</p>
+            <a href="register.php">
+            <button id="signUpButton">Register</button>
+            </a>
         </div>
     </div>
 

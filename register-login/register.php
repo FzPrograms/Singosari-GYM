@@ -1,26 +1,40 @@
 <?php
-    session_start(); // Start session to read error messages
-    $error = ""; // Initialize error message
-    include "../service/database.php";
+session_start(); // Mulai sesi untuk membaca pesan kesalahan
+$error = ""; // Inisialisasi pesan kesalahan
+include "../service/database.php";
 
-    $register_message = "";
+$register_message = "";
 
-    if(isset($_POST["register"])){
-        $nama = $_POST["nama"];
-        $alamat = $_POST["alamat"];
-        $email = $_POST["email"];
-        $no_tlp = $_POST["no_tlp"];
+// Ambil pesan kesalahan dari session jika ada
+if (isset($_SESSION['error'])) {
+    $error = $_SESSION['error'];
+    unset($_SESSION['error']); // Hapus pesan kesalahan setelah ditampilkan
+}
 
-        $sql = "INSERT INTO pelanggan (Nama, Alamat, Email, Nomor_Telepon) VALUES
-        ('$nama', '$alamat', '$email', '$no_tlp')";
+if (isset($_POST["register"])) {
+    $nama = $_POST["nama"];
+    $alamat = $_POST["alamat"];
+    $email = $_POST["email"];
+    $no_tlp = $_POST["no_tlp"];
 
-        if($db->query($sql)){
-            header("location: login.php?message=Daftar akun berhasil, silahkan Masuk.");
-        }else{
-            $register_message = " Daftar akun gagal, silahkan coba lagi!";
+    // Cek apakah email sudah terdaftar
+    $checkEmail = "SELECT * FROM pelanggan WHERE Email='$email'";
+    $result = $db->query($checkEmail);
+    if ($result->num_rows > 0) {
+        $_SESSION['error'] = "Email sudah terdaftar!";
+        header("Location: register.php");
+        exit();
+    } else {
+        $sql = "INSERT INTO pelanggan (Nama, Alamat, Email, Nomor_Telepon) VALUES ('$nama', '$alamat', '$email', '$no_tlp')";
+
+        if ($db->query($sql)) {
+            header("location: ../program/langganan.php");
+            exit();
+        } else {
+            $register_message = "Daftar akun gagal, silahkan coba lagi!";
         }
     }
-
+}
 ?>
 
 <!DOCTYPE html>
@@ -93,7 +107,9 @@
             <?php if ($error): ?>
                 <p style="color: red;"><?= $error ?></p>
             <?php endif; ?>
-            <input type="submit" class="btn" value="Sign Up" name="register">
+            <form action="../program/langganan.php" method="post">
+    <input type="submit" class="btn" value="Registrasi" name="register">
+</form>
         </form>
         <p class="or">
             ----------or--------
@@ -103,8 +119,10 @@
             <i class="fab fa-facebook"></i>
         </div>
         <div class="links">
-            <p>Already Have Account?</p>
-            <button id="signInButton">Sign In</button>
+            <p>Sudah pernah mendaftar akun?</p>
+            <a href="login.php">
+            <button id="signInButton">Login</button>
+</a>
         </div>
     </div>
 
